@@ -18,8 +18,28 @@ grad = zeros(size(theta));
 %               derivatives of the cost w.r.t. each parameter in theta
 
 
+theta0 = theta(1, :);
+thetaRest = theta(2:end, :);
 
+% cost function
 
+cost = costFunction(theta, X, y)(1);
+normalCost = cost(1);
+regularization = (lambda	/ (2*m)) * sum(thetaRest .^ 2);
+J = normalCost + regularization	;
+
+% gradient descent
+
+z = theta' * X';
+prediction = sigmoid(z);
+
+% gradient descent
+g = prediction;
+partialDeriv = (g .- y');
+grad = 1/m * X' * partialDeriv';
+gradientReg = (lambda / m) * theta;
+gradientReg(1) = 0;
+grad = grad + gradientReg;
 
 
 % =============================================================
