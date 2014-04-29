@@ -21,15 +21,24 @@ p = zeros(size(X, 1), 1);
 %       can use max(A, [], 2) to obtain the max for each row.
 %
 
+% cd 'C:/Users/dsbmac/Documents/Professional Development/Machine Learning/assignments/mlclass-ex3-005/mlclass-ex3'
 
+% a1 equals the X input matrix with a column of 1's added (bias units)
 
+a1 = [ones(m,1), X];
 
+ % z2 equals the product of a1 and Theta1
+z2 = 	a1 * Theta1';
+a2 = sigmoid(z2);
+a2 = [ones(size(a2)(1,:),1), a2];
 
-
-
+% a3 is product of a2 with trans(Theta2)
+z3 = a2 * Theta2';
+a3 = sigmoid(z3);
+[prob, p] = max(a3, [], 2);
 
 
 % =========================================================================
 
-
+ 
 end
