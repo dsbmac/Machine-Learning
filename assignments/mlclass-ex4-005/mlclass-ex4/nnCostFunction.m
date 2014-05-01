@@ -14,16 +14,26 @@ function [J grad] = nnCostFunction(nn_params, ...
 %   partial derivatives of the neural network.
 %
 
+% local directory for octave
+% cd 'C:/Users/dsbmac/Documents/Professional Development/Machine Learning/assignments/mlclass-ex4-005/mlclass-ex4'
+
 % Reshape nn_params back into the parameters Theta1 and Theta2, the weight matrices
 % for our 2 layer neural network
+
+disp("Theta1:")
+
 Theta1 = reshape(nn_params(1:hidden_layer_size * (input_layer_size + 1)), ...
                  hidden_layer_size, (input_layer_size + 1));
+size(Theta1)
 
+disp("Theta2:")
 Theta2 = reshape(nn_params((1 + (hidden_layer_size * (input_layer_size + 1))):end), ...
                  num_labels, (hidden_layer_size + 1));
+size(Theta2)
 
 % Setup some useful variables
-m = size(X, 1);
+disp("m:")
+m = size(X, 1)
          
 % You need to return the following variables correctly 
 J = 0;
@@ -61,6 +71,46 @@ Theta2_grad = zeros(size(Theta2));
 %               the regularization separately and then add them to Theta1_grad
 %               and Theta2_grad from Part 2.
 %
+
+
+% a1 equals the X input matrix with a column of 1's added (bias units)
+
+
+disp("y:")
+size(y)
+
+
+a1 = [ones(m,1), X];
+
+ % z2 equals the product of a1 and Theta1
+z2 = 	a1 * Theta1';
+a2 = sigmoid(z2);
+a2 = [ones(size(a2)(1,:),1), a2];
+
+% a3 is product of a2 with trans(Theta2)
+z3 = a2 * Theta2';
+a3 = sigmoid(z3);
+
+[prediction, p] = max(a3, [], 2);
+disp("prediction:")
+prediction(1,:);
+size(prediction)
+
+disp("a3:")
+size(a3)
+
+disp("y_matrix:")
+y_matrix = eye(num_labels)(y,:);
+size(y_matrix)
+
+
+diff1 = -y_matrix .* log(a3);
+diff2 = (1 .- y_matrix) .* (log(1 .- a3));
+
+diff = diff1 - diff2;
+J = sum(1/m * sum(diff));
+J
+
 
 
 
