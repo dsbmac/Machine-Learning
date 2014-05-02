@@ -75,11 +75,6 @@ Theta2_grad = zeros(size(Theta2));
 
 % a1 equals the X input matrix with a column of 1's added (bias units)
 
-
-disp("y:")
-size(y)
-
-
 a1 = [ones(m,1), X];
 
  % z2 equals the product of a1 and Theta1
@@ -92,16 +87,8 @@ z3 = a2 * Theta2';
 a3 = sigmoid(z3);
 
 [prediction, p] = max(a3, [], 2);
-disp("prediction:")
-prediction(1,:);
-size(prediction)
 
-disp("a3:")
-size(a3)
-
-disp("y_matrix:")
 y_matrix = eye(num_labels)(y,:);
-size(y_matrix)
 
 
 diff1 = -y_matrix .* log(a3);
@@ -109,26 +96,20 @@ diff2 = (1 .- y_matrix) .* (log(1 .- a3));
 
 diff = diff1 - diff2;
 J = sum(1/m * sum(diff));
-J
+
+% regularized cost function
+
+% compute the regularization terms separately
+% ignore the bias unit
+Theta1Rest = Theta1(:, 2:end);
+Theta2Rest = Theta2(:, 2:end);
+
+regularization1 =  (lambda / (2*m)) * sum( sum(Theta1Rest .^ 2) );
+regularization2 =  (lambda / (2*m)) * sum( sum(Theta2Rest .^ 2) );
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+% then add them to the unregularized cost from Step 3.
+J = J + regularization1	+ regularization2;
 
 % -------------------------------------------------------------
 
