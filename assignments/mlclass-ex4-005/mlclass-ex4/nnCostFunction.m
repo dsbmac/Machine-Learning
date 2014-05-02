@@ -20,20 +20,14 @@ function [J grad] = nnCostFunction(nn_params, ...
 % Reshape nn_params back into the parameters Theta1 and Theta2, the weight matrices
 % for our 2 layer neural network
 
-disp("Theta1:")
-
 Theta1 = reshape(nn_params(1:hidden_layer_size * (input_layer_size + 1)), ...
                  hidden_layer_size, (input_layer_size + 1));
-size(Theta1)
 
-disp("Theta2:")
 Theta2 = reshape(nn_params((1 + (hidden_layer_size * (input_layer_size + 1))):end), ...
                  num_labels, (hidden_layer_size + 1));
-size(Theta2)
 
 % Setup some useful variables
-disp("m:")
-m = size(X, 1)
+m = size(X, 1);
          
 % You need to return the following variables correctly 
 J = 0;
@@ -97,9 +91,10 @@ diff2 = (1 .- y_matrix) .* (log(1 .- a3));
 diff = diff1 - diff2;
 J = sum(1/m * sum(diff));
 
-% regularized cost function
 
+% regularized cost function
 % compute the regularization terms separately
+
 % ignore the bias unit
 Theta1Rest = Theta1(:, 2:end);
 Theta2Rest = Theta2(:, 2:end);
@@ -111,12 +106,42 @@ regularization2 =  (lambda / (2*m)) * sum( sum(Theta2Rest .^ 2) );
 % then add them to the unregularized cost from Step 3.
 J = J + regularization1	+ regularization2;
 
+
+% Backpropagation
+
+% calculate d3
+d3 = a3 .- y_matrix;
+
+% calculate d2
+d2 = (d3 * Theta2Rest) .* ( sigmoidGradient(z2) ) ;
+
+% calculate Delta2
+Delta2 = d3' * a2;
+Delta1 = d2' * a1;
+
+% calculate non-regularized theta gradients
+Theta1_grad = (1/m) * Delta1;
+Theta2_grad = (1/m) * Delta2;
+
+
+% regularized theta gradients
+
+% calculate regularization terms
+Theta1_gradReg = (lambda / m) * Theta1;
+Theta2_gradReg = (lambda / m) * Theta2;
+
+% overwrite the regularizatio bias units to 0
+Theta1_gradReg(:,1) = 0;
+Theta2_gradReg(:,1) = 0;
+
+Theta1_grad = Theta1_grad + Theta1_gradReg;
+Theta2_grad = Theta2_grad + Theta2_gradReg;
+
 % -------------------------------------------------------------
 
 % =========================================================================
 
 % Unroll gradients
 grad = [Theta1_grad(:) ; Theta2_grad(:)];
-
 
 end
