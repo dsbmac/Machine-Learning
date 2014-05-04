@@ -48,10 +48,10 @@ x = zeros(n, 1);
 %
 %
 
-for i=1:size(word_indices)(2)
+% change the value at x(i) to 1 for ith element in word_indices
+for i=1:size(word_indices)(1)
 	x(word_indices(i)) = 1;
 end
-
 
 
 % =========================================================================
