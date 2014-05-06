@@ -24,10 +24,19 @@ theta0 = theta(1, :);
 thetaRest = theta(2:end, :);
 
 % cost function
-
-normalCost = (1 / (2*m)) * sum(((X * theta) .- y).^2);
+prediction = (X * theta);
+normalCost = (1 / (2*m)) * sum((prediction .- y).^2);
 regularization = (lambda / (2*m)) * sum(thetaRest .^ 2);
 J = normalCost + regularization	;
+
+% gradient descent
+partialDeriv = (prediction .- y);
+grad = 1/m * partialDeriv' * X;
+gradRegularization = (lambda / m) * theta';
+
+% neutralize the bias values
+gradRegularization(1) = 0;
+grad = grad + gradRegularization;
 
 
 % =========================================================================
