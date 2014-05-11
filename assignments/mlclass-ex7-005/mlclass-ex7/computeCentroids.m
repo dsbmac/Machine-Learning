@@ -27,11 +27,11 @@ centroids = zeros(K, n);
 %
 
 
-for clusterIndex = 1:K
-	isCluster = ismember(idx,clusterIndex);
+for k = 1:K
+	isCluster = ismember(idx,k);
 	cluster = X(isCluster,:);
 	mu = mean(cluster);
-	centroids(clusterIndex,:) = mu;
+	centroids(k,:) = mu;
 end
 
 
